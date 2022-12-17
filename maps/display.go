@@ -3,7 +3,7 @@ package maps
 import "fmt"
 
 /*
-Displays a map[interface{}]interface{}, map[string]interface{}, []interface{} while also iterating those types within
+Display displays a map[interface{}]interface{}, map[string]interface{}, []interface{} while also iterating those types within
 
 TODO use constraints
 */

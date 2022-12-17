@@ -4,7 +4,7 @@ import (
 	"path"
 )
 
-/* Like "path".Join except it takes a []string rather than ...string */
+// Join joins the string slice to a string separated by a `/`
 func Join(names []string) string {
 	return path.Join(names...)
 }

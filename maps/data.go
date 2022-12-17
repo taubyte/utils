@@ -7,7 +7,7 @@ import (
 	"github.com/taubyte/utils/hex"
 )
 
-// Number is float32 so it's more portable
+// Number retrieves the interface{} value from the map and returns a float32.
 func Number(config map[string]interface{}, key string) (float32, error) {
 	var ok bool
 	if _, ok = config[key]; ok == false {
@@ -41,6 +41,7 @@ func Number(config map[string]interface{}, key string) (float32, error) {
 	}
 }
 
+// Vector retrieves a interface{} value from the map and returns a vector.
 func Vector(config map[string]interface{}, key string) ([]float32, error) {
 	var ok bool
 	if _, ok = config[key]; ok == false {
@@ -119,6 +120,7 @@ func Vector(config map[string]interface{}, key string) ([]float32, error) {
 	}
 }
 
+// String retrieves interface{} value from map and returns a string value.
 func String(config map[string]interface{}, key string) (string, error) {
 	var ok bool
 	var ret string
@@ -135,6 +137,7 @@ func String(config map[string]interface{}, key string) (string, error) {
 	return ret, nil
 }
 
+// ByteArray retrieves the interface{} value from the map and returns a byte array.
 func ByteArray(config map[string]interface{}, key string) ([]byte, error) {
 	var ok bool
 	var ret []byte
@@ -151,6 +154,7 @@ func ByteArray(config map[string]interface{}, key string) ([]byte, error) {
 	return ret, nil
 }
 
+// StringArray retrieves the interface{} value from the map and returns a string slice.
 func StringArray(config map[string]interface{}, key string) ([]string, error) {
 	var ok bool
 	var ret []string
@@ -176,6 +180,7 @@ func StringArray(config map[string]interface{}, key string) ([]string, error) {
 	return ret, nil
 }
 
+// HexInt retrieves the interface{} value from the map and returns an int.
 func HexInt(config map[string]interface{}, key string) (int, error) {
 	hexString, err := String(config, key)
 	if err != nil {
@@ -218,6 +223,7 @@ func Int(config map[string]interface{}, key string) (int, error) {
 	return ret, nil
 }
 
+// Bool retrieves the interface{} value from the map and returns a boolean.
 func Bool(config map[string]interface{}, key string) (bool, error) {
 	var ok bool
 	var ret bool
@@ -234,6 +240,7 @@ func Bool(config map[string]interface{}, key string) (bool, error) {
 	return ret, nil
 }
 
+// Keys returns all string keys in the given map.
 func Keys(m map[string]interface{}) []string {
 	if m == nil {
 		return nil
@@ -247,6 +254,7 @@ func Keys(m map[string]interface{}) []string {
 	return keys
 }
 
+// IntKeys returns all int keys in the given map.
 func IntKeys(m map[int]interface{}) []int {
 	if m == nil {
 		return nil
@@ -260,6 +268,8 @@ func IntKeys(m map[int]interface{}) []int {
 	return keys
 }
 
+// SafeStringKeys converts a map[interface{}]interface{} to a map[string]interface{},
+// if key is not a string value then key is converted to a string.
 func SafeStringKeys(m map[interface{}]interface{}) map[string]interface{} {
 	if m == nil {
 		return nil
@@ -278,6 +288,8 @@ func SafeStringKeys(m map[interface{}]interface{}) map[string]interface{} {
 	return r
 }
 
+// ToStringKeys converts a map[interface{}]interface{} to a map[string]interface{},
+// returns an error if key is not a string.
 func ToStringKeys(m map[interface{}]interface{}) (map[string]interface{}, error) {
 	if m == nil {
 		return nil, nil
@@ -296,6 +308,8 @@ func ToStringKeys(m map[interface{}]interface{}) (map[string]interface{}, error)
 	return r, nil
 }
 
+// InterfaceToStringKeys converts an interface{} to a map[string]interface{},
+// returns an error if key is not a string.
 func InterfaceToStringKeys(m interface{}) (map[string]interface{}, error) {
 	if m == nil {
 		return nil, nil
@@ -312,6 +326,8 @@ func InterfaceToStringKeys(m interface{}) (map[string]interface{}, error) {
 	}
 }
 
+// SafeInterfaceToStringKeys converts an interface to map[string]interface{},
+// if keys are not strings, then the key is converted into a string.
 func SafeInterfaceToStringKeys(m interface{}) map[string]interface{} {
 	if m == nil {
 		return nil

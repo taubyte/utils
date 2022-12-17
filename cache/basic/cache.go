@@ -15,7 +15,7 @@ type TTLMap struct {
 	l sync.Mutex
 }
 
-// Create a new TTLMap with a global TTL in seconds
+// New creates a new TTLMap with a global TTL in seconds
 func New(ln int, maxTTL int) (m *TTLMap) {
 	m = &TTLMap{m: make(map[string]*item, ln)}
 	go func() {
