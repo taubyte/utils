@@ -83,13 +83,14 @@ func Tarball(src string, options *Options, writers ...io.Writer) error {
 		}
 
 		// copy file data into tar writer
-		if _, err := io.Copy(tw, f); err != nil {
-			return err
-		}
+		_, err = io.Copy(tw, f)
 
 		// manually close here after each file operation; defering would cause each file close
 		// to wait until all operations have completed.
 		f.Close()
+		if err != nil {
+			return err
+		}
 
 		return nil
 	})
