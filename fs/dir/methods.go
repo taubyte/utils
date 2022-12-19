@@ -8,7 +8,7 @@ import (
 
 type Directory string
 
-/* Builds an absolute path from the provided path, makes the required directories to achieve it, and returns a Directory */
+// New builds an absolute path from the provided path, makes the required directories to achieve it, and returns a Directory
 func New(path string) (Directory, error) {
 	_path, err := filepath.Abs(path)
 	if err != nil {
@@ -17,7 +17,7 @@ func New(path string) (Directory, error) {
 	return Directory(_path), os.MkdirAll(path, 0755)
 }
 
-/* Builds an absolute path from the provided path, confirms the path exists, and returns a Directory */
+// Open builds an absolute path from the provided path, confirms the path exists, and returns a Directory
 func Open(path string) (Directory, error) {
 	_path, err := filepath.Abs(path)
 	if err != nil {
@@ -27,12 +27,12 @@ func Open(path string) (Directory, error) {
 	return Directory(_path), err
 }
 
-/* Gets the absolute path of the directory */
+// Path gets the absolute path of the directory
 func (d Directory) Path() string {
 	return string(d)
 }
 
-/* Removes the directory and any children within it */
+// Remove removes the directory and any children within it
 func (d Directory) Remove() error {
 	if d == "" {
 		return errors.New("Can't remove empty Directory")
@@ -40,7 +40,7 @@ func (d Directory) Remove() error {
 	return os.RemoveAll(d.Path())
 }
 
-/* Moves the directory to the provided path, returns a directory of the new path */
+// Move moves the directory to the provided path, returns a directory of the new path
 func (d Directory) Move(to string) (Directory, error) {
 	_path, err := filepath.Abs(to)
 	if err != nil {

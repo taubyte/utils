@@ -9,7 +9,7 @@ import (
 
 /* original: https://github.com/utahta/go-openuri */
 
-// Client type
+// Client wraps extended HTTP client helpers.
 type Client struct {
 	httpClient *http.Client
 }
@@ -17,7 +17,7 @@ type Client struct {
 // ClientOption type
 type ClientOption func(*Client) error
 
-// New returns a Client struct
+// New returns a Client
 func New(options ...ClientOption) (*Client, error) {
 	c := &Client{httpClient: http.DefaultClient}
 	for _, option := range options {
@@ -28,7 +28,7 @@ func New(options ...ClientOption) (*Client, error) {
 	return c, nil
 }
 
-// Open an io.ReadCloser from a local file or URL
+// Open opens an io.ReadCloser from a local file or URL
 func Open(name string, options ...ClientOption) (io.ReadCloser, error) {
 	c, err := New(options...)
 	if err != nil {
@@ -45,6 +45,7 @@ func WithHTTPClient(v *http.Client) ClientOption {
 	}
 }
 
+// Open opens either a response body from a given url, or a file from a given path.
 func (c *Client) Open(name string) (io.ReadCloser, error) {
 	if strings.HasPrefix(name, "http://") || strings.HasPrefix(name, "https://") {
 		resp, err := c.httpClient.Get(name)

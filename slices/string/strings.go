@@ -1,6 +1,6 @@
 package slices
 
-/* Returns whether or not a provided []string contains a provided string value */
+// Contains returns a boolean based on whether a value is contained in the given slice.
 func Contains(slice []string, value string) bool {
 	for _, s := range slice {
 		if value == s {
@@ -10,7 +10,7 @@ func Contains(slice []string, value string) bool {
 	return false
 }
 
-/* Returns the reverse of a provides []string */
+// ReverseArray returns the given array in reversed order.
 func ReverseArray(arr []string) (reversed []string) {
 	reversed = make([]string, len(arr))
 	last := len(arr) - 1
@@ -20,14 +20,10 @@ func ReverseArray(arr []string) (reversed []string) {
 	return
 }
 
-/* Returns the last element of a provided []string */
+// Last returns the last string in a string slice while avoiding panics from a nil slice.
 func Last(arr []string) string {
 	if len(arr) == 0 {
 		return ""
-	}
-
-	if len(arr) == 1 {
-		return arr[0]
 	}
 
 	return arr[len(arr)-1]

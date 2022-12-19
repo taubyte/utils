@@ -5,7 +5,7 @@ import (
 )
 
 /*
-Splits a path on / and cleans up empty paths
+Split splits the string by `/` separator, then cleans up any empty strings
 
 example:
 

@@ -1,16 +1,16 @@
 package env
 
 import (
-	"errors"
 	"fmt"
 	"os"
 )
 
-func Get(name string) (string, error) {
-	val, ok := os.LookupEnv(name)
-	if ok {
-		return val, nil
-	} else {
-		return "", errors.New(fmt.Sprintf("Environment variable `%s` not found", name))
+// Get an environment variable and returns an error if not found
+func Get(name string) (val string, err error) {
+	var ok bool
+	if val, ok = os.LookupEnv(name); ok == false {
+		return "", fmt.Errorf("Environment variable `%s` not found,", name)
 	}
+
+	return
 }
