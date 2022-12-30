@@ -31,15 +31,12 @@ func Last(arr []string) string {
 
 // Unique returns a new slice with only unique values from the original slice.
 func Unique(strSlice []string) []string {
-	keys := make(map[string]bool)
-
-	list := []string{}
-	for _, entry := range strSlice {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
+	var unique []string
+	for _, elm := range strSlice {
+		if !Contains(unique, elm) {
+			unique = append(unique, elm)
 		}
 	}
 
-	return list
+	return unique
 }
