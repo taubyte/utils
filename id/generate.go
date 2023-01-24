@@ -7,7 +7,7 @@ import (
 	"io"
 	"time"
 
-	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
+	mh "github.com/multiformats/go-multihash"
 )
 
 var (
