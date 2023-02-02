@@ -13,16 +13,16 @@ import (
 // GenerateCert generates certificate and private key based on the given host.
 //
 // Reference: https://github.com/valyala/fasthttp/blob/master/examples/multidomain/multidomain.go
-func GenerateCert(host string) ([]byte, []byte, error) {
+func GenerateCert(host string) (certificate []byte, privateKey []byte, err error) {
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
 	serialNumberLimit := new(big.Int).Lsh(big.NewInt(1), 128)
 	serialNumber, err := rand.Int(rand.Reader, serialNumberLimit)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
 	cert := &x509.Certificate{
@@ -44,19 +44,19 @@ func GenerateCert(host string) ([]byte, []byte, error) {
 		rand.Reader, cert, cert, &priv.PublicKey, priv,
 	)
 
-	p := pem.EncodeToMemory(
+	privateKey = pem.EncodeToMemory(
 		&pem.Block{
 			Type:  "PRIVATE KEY",
 			Bytes: x509.MarshalPKCS1PrivateKey(priv),
 		},
 	)
 
-	b := pem.EncodeToMemory(
+	certificate = pem.EncodeToMemory(
 		&pem.Block{
 			Type:  "CERTIFICATE",
 			Bytes: certBytes,
 		},
 	)
 
-	return b, p, err
+	return
 }
