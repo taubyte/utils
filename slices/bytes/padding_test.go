@@ -2,6 +2,7 @@ package bytes
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 )
 
@@ -48,6 +49,7 @@ func TestStripPadding(t *testing.T) {
 	trimmedData := StripPadding(paddedData)
 
 	if !bytes.Equal(trimmedData, []byte(testString)) {
+		fmt.Println(trimmedData, []byte(testString))
 		t.Error("bytes are not the same")
 	}
 }

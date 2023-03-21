@@ -30,14 +30,7 @@ func PadLCM(data []byte, lcm int) []byte {
 
 // StripPadding returns a buffer of the data stripped of all trailing 0s
 func StripPadding(data []byte) []byte {
-	for {
-		_data := bytes.TrimSuffix(data, []byte{0})
-		if bytes.Equal(data, _data) {
-			break
-		}
-
-		data = _data
-	}
-
-	return data
+	return bytes.TrimRightFunc(data, func(r rune) bool {
+		return byte(r) == 0
+	})
 }
