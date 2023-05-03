@@ -20,6 +20,7 @@ import (
 	"github.com/multiformats/go-multihash"
 )
 
+// reference: https://github.com/ipld/go-car/blob/master/cmd/car/create.go
 func Car(ctx context.Context, source, target string) error {
 	// Make sure source exists
 	_, err := os.Stat(source)
@@ -97,6 +98,7 @@ func writeFiles(ctx context.Context, bs *blockstore.ReadWrite, paths ...string) 
 			if !ok {
 				return fmt.Errorf("not a cidlink")
 			}
+
 			blk, err := blocks.NewBlockWithCid(buf.Bytes(), cl.Cid)
 			if err != nil {
 				return fmt.Errorf("creating new block with cid `%s` failed with: %s", cl.Cid, err)
@@ -104,7 +106,7 @@ func writeFiles(ctx context.Context, bs *blockstore.ReadWrite, paths ...string) 
 
 			err = bs.Put(ctx, blk)
 			if err != nil {
-				return fmt.Errorf("failed putting block with: %s", err)
+				return fmt.Errorf("putting block failed with: %s", err)
 			}
 
 			return nil
@@ -117,11 +119,13 @@ func writeFiles(ctx context.Context, bs *blockstore.ReadWrite, paths ...string) 
 		if err != nil {
 			return cid.Undef, err
 		}
+
 		name := path.Base(p)
 		entry, err := builder.BuildUnixFSDirectoryEntry(name, int64(size), l)
 		if err != nil {
 			return cid.Undef, err
 		}
+
 		topLevel = append(topLevel, entry)
 	}
 
