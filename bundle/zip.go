@@ -8,9 +8,10 @@ import (
 	"path/filepath"
 )
 
+type ZipMethod func(archive *zip.Writer, source string) error
+
 // Zip contents from source to target and returns the file.
-// REF: https://forum.golangbridge.org/t/trying-to-zip-files-without-creating-folder-inside-archive/10260
-func Zip(source, target string) (*os.File, error) {
+func Zip(source, target string, zipMethod ZipMethod) (*os.File, error) {
 	_, err := os.Stat(source)
 	if err != nil {
 		return nil, err
@@ -25,7 +26,35 @@ func Zip(source, target string) (*os.File, error) {
 	archive := zip.NewWriter(zipFile)
 	defer archive.Close()
 
-	err = filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+	if err = zipMethod(archive, source); err != nil {
+		return nil, err
+	}
+
+	return zipFile, archive.Flush()
+}
+
+// For now this works for only zipping the main.wasm file
+func ZipWasm(archive *zip.Writer, source string) error {
+	data, err := os.ReadFile(source)
+	if err != nil {
+		return fmt.Errorf("reading path:`%s` failed with: %w", source, err)
+	}
+
+	writer, err := archive.Create("main.wasm")
+	if err != nil {
+		return err
+	}
+
+	if _, err = writer.Write(data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// REF: https://forum.golangbridge.org/t/trying-to-zip-files-without-creating-folder-inside-archive/10260
+func ZipWebsite(archive *zip.Writer, source string) error {
+	return filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("Walk basic source:`%s` failed with: %w", source, err)
 		}
@@ -67,9 +96,4 @@ func Zip(source, target string) (*os.File, error) {
 
 		return nil
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	return zipFile, archive.Flush()
 }
