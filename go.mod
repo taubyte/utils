@@ -2,13 +2,11 @@ module github.com/taubyte/utils
 
 go 1.18
 
-replace github.com/taubyte/go-specs => ../go-specs
-
 require (
 	github.com/google/uuid v1.3.0
 	github.com/ipsn/go-ipfs v0.0.0-20190407150747-8b9b72514244
 	github.com/multiformats/go-multihash v0.2.1
-	github.com/taubyte/go-specs v0.9.6
+	github.com/taubyte/go-specs v0.10.2-pre
 
 )
 
