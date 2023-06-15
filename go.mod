@@ -7,7 +7,6 @@ require (
 	github.com/ipsn/go-ipfs v0.0.0-20190407150747-8b9b72514244
 	github.com/multiformats/go-multihash v0.2.1
 	github.com/taubyte/go-specs v0.10.2-pre
-
 )
 
 require (

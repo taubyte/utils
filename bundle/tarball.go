@@ -57,13 +57,13 @@ func Tarball(src string, options *Options, writers ...io.Writer) error {
 
 		// This way bytes read is always same as long as data is same
 		if options != nil {
-			if options.AccessTime.IsZero() == false {
+			if !options.AccessTime.IsZero() {
 				header.AccessTime = options.AccessTime
 			}
-			if options.ChangeTime.IsZero() == false {
+			if !options.ChangeTime.IsZero() {
 				header.ChangeTime = options.ChangeTime
 			}
-			if options.ModTime.IsZero() == false {
+			if !options.ModTime.IsZero() {
 				header.ModTime = options.ModTime
 			}
 		}
