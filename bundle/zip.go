@@ -6,11 +6,14 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/taubyte/go-specs/builders/wasm"
 )
 
+type ZipMethod func(archive *zip.Writer, source string) error
+
 // Zip contents from source to target and returns the file.
-// REF: https://forum.golangbridge.org/t/trying-to-zip-files-without-creating-folder-inside-archive/10260
-func Zip(source, target string) (*os.File, error) {
+func Zip(source, target string, zipMethod ZipMethod) (*os.File, error) {
 	_, err := os.Stat(source)
 	if err != nil {
 		return nil, err
@@ -18,16 +21,43 @@ func Zip(source, target string) (*os.File, error) {
 
 	zipFile, err := os.Create(target)
 	if err != nil {
-		return nil, fmt.Errorf("Create `%s`: %w", target, err)
+		return nil, fmt.Errorf("create `%s`: %w", target, err)
 	}
 
 	defer zipFile.Seek(0, io.SeekStart)
 	archive := zip.NewWriter(zipFile)
 	defer archive.Close()
 
-	err = filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+	if err = zipMethod(archive, source); err != nil {
+		return nil, err
+	}
+
+	return zipFile, archive.Flush()
+}
+
+func ZipFile(archive *zip.Writer, source string) error {
+	data, err := os.ReadFile(source)
+	if err != nil {
+		return fmt.Errorf("reading path:`%s` failed with: %w", source, err)
+	}
+
+	writer, err := archive.Create(wasm.WasmFile)
+	if err != nil {
+		return err
+	}
+
+	if _, err = writer.Write(data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// REF: https://forum.golangbridge.org/t/trying-to-zip-files-without-creating-folder-inside-archive/10260
+func ZipDir(archive *zip.Writer, source string) error {
+	return filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			return fmt.Errorf("Walk basic source:`%s` failed with: %w", source, err)
+			return fmt.Errorf("walk basic source:`%s` failed with: %w", source, err)
 		}
 
 		if info.IsDir() {
@@ -39,7 +69,7 @@ func Zip(source, target string) (*os.File, error) {
 
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
-			return fmt.Errorf("Zipinfoheader `%s` failed with: %w", info, err)
+			return fmt.Errorf("zipinfoheader `%s` failed with: %w", info, err)
 		}
 
 		header.Name = path[len(source)+1:]
@@ -56,20 +86,15 @@ func Zip(source, target string) (*os.File, error) {
 
 		file, err := os.Open(path)
 		if err != nil {
-			return fmt.Errorf("Open Path:`%s` failed with: %w", path, err)
+			return fmt.Errorf("open Path:`%s` failed with: %w", path, err)
 		}
 		defer file.Close()
 
 		_, err = io.Copy(writer, file)
 		if err != nil {
-			return fmt.Errorf("Copy failed with: %w", err)
+			return fmt.Errorf("copy failed with: %w", err)
 		}
 
 		return nil
 	})
-	if err != nil {
-		return nil, err
-	}
-
-	return zipFile, archive.Flush()
 }
