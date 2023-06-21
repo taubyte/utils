@@ -6,11 +6,10 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/ipsn/go-ipfs v0.0.0-20190407150747-8b9b72514244
 	github.com/multiformats/go-multihash v0.2.1
-	github.com/taubyte/go-specs v0.10.2-pre
+	github.com/taubyte/go-specs v0.10.5
 )
 
 require (
-	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
